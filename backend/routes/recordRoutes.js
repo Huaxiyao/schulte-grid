@@ -31,5 +31,18 @@ export function createRecordRoutes(db) {
     return res.json({ ok: true, best: isRecord ? time : prevBest, isNewRecord: isRecord });
   });
 
+  router.get('/leaderboard', (req, res) => {
+    const size = parseInt(req.query.size, 10);
+    if (![3, 4, 5, 6].includes(size)) return res.status(400).json({ ok: false, error: '无效难度' });
+    const rows = db.prepare(`
+      SELECT username, best_time, updated_at
+      FROM records
+      WHERE size = ?
+      ORDER BY best_time ASC
+      LIMIT 10
+    `).all(size);
+    return res.json({ ok: true, list: rows });
+  });
+
   return router;
 }
