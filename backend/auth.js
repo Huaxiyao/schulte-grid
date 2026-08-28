@@ -19,23 +19,22 @@ export function verifyPassword(password, salt, hash) {
 }
 
 export function createAuth(db) {
-  return {
-    userOfToken(token) {
-      if (!token || typeof token !== 'string' || token.length > 200) return null;
-      const row = db.prepare('SELECT username FROM sessions WHERE token = ?').get(token);
-      return row ? row.username : null;
-    },
-    makeSession(res, username) {
-      const token = uid();
-      db.prepare('INSERT INTO sessions (token, username) VALUES (?, ?)').run(token, username);
-      res.json({ ok: true, token, username });
-    },
-    requireAuth(req, res, next) {
-      const token = (req.headers['x-token'] || '').trim();
-      const username = this.userOfToken(token);
-      if (!username) return res.status(401).json({ ok: false, error: '登录已失效，请重新登录' });
-      req.username = username;
-      next();
-    },
-  };
+  function userOfToken(token) {
+    if (!token || typeof token !== 'string' || token.length > 200) return null;
+    const row = db.prepare('SELECT username FROM sessions WHERE token = ?').get(token);
+    return row ? row.username : null;
+  }
+  function makeSession(res, username) {
+    const token = uid();
+    db.prepare('INSERT INTO sessions (token, username) VALUES (?, ?)').run(token, username);
+    res.json({ ok: true, token, username });
+  }
+  function requireAuth(req, res, next) {
+    const token = (req.headers['x-token'] || '').trim();
+    const username = userOfToken(token);
+    if (!username) return res.status(401).json({ ok: false, error: '登录已失效，请重新登录' });
+    req.username = username;
+    next();
+  }
+  return { userOfToken, makeSession, requireAuth };
 }
