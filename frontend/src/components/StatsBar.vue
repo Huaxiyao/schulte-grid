@@ -6,7 +6,7 @@
     </div>
     <div class="stat target">
       <label>目标</label>
-      <div class="val">{{ state.nextNum }}</div>
+      <div class="val">{{ targetNum }}</div>
     </div>
     <div class="stat">
       <label>最佳</label>
@@ -28,6 +28,9 @@ const bestText = computed(() => {
   const b = state.records[String(state.size)];
   return b !== undefined && b !== null ? fmt(b) : '—';
 });
+
+// 点完最后一格后 nextNum 会自增到 total+1，显示封顶在 total
+const targetNum = computed(() => Math.min(state.nextNum, state.size * state.size));
 </script>
 
 <style scoped>
