@@ -1,0 +1,78 @@
+:root{
+  --paper: rgba(242, 250, 252, 0.86);
+  --paper-deep: rgba(225, 240, 246, 0.86);
+  --paper-card: rgba(247, 252, 255, 0.94);
+  --ink: #14354a;
+  --ink-soft: #35607e;
+  --ink-faint: #6f93ae;
+  --vermilion: #0e8a99;
+  --vermilion-deep: #0a6f80;
+  --line: rgba(20, 53, 74, 0.18);
+  --glow: 0 0 24px rgba(17,167,184,0.30);
+  --serif-cn: "Noto Serif SC", "Songti SC", "PingFang SC", serif;
+  --num-font: "Outfit", "Avenir Next", "PingFang SC", sans-serif;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ -webkit-text-size-adjust: 100%; }
+html, body{ height: 100%; overflow: hidden; }
+body{
+  font-family: var(--serif-cn);
+  color: var(--ink);
+  background:
+    linear-gradient(180deg,
+      rgba(240, 250, 253, 0.05) 0%,
+      rgba(240, 250, 253, 0.14) 34%,
+      rgba(234, 246, 250, 0.62) 66%,
+      rgba(232, 245, 250, 0.88) 100%),
+    url("/8318ebad4821d90fee2621d30c4fece2.jpg") 24% 6% / cover no-repeat fixed,
+    #e4f2f5;
+  min-height: 100%;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+body::before{
+  content:"";
+  position: fixed; inset: 0;
+  background-image:
+    radial-gradient(circle at 88% 12%, rgba(255,172,196,.20) 0%, transparent 13%),
+    radial-gradient(circle at 14% 72%, rgba(64,190,205,.14) 0%, transparent 15%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+.side-mark{
+  position: fixed;
+  left: 22px; top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  letter-spacing: .55em;
+  font-size: 11px;
+  color: var(--ink-faint);
+  user-select: none;
+  z-index: 1;
+}
+.side-mark::before, .side-mark::after{
+  content:"";
+  display:block;
+  width:1px; height: 56px;
+  background: var(--line);
+  margin: 18px auto;
+}
+@media (max-width: 960px){ .side-mark{ display:none; } }
+.app{
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vh, 56px) 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+@keyframes fadeUp{
+  from{ opacity: 0; transform: translateY(18px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
