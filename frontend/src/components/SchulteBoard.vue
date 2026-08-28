@@ -77,7 +77,7 @@ function onCell(num, cell) {
     void cell.offsetWidth;
     cell.classList.add('wrong');
     sndWrong();
-    setTimeout(() => cell.classList.remove('wrong'), 320);
+    setTimeout(() => cell.classList.remove('wrong'), 380);
   }
 }
 
@@ -189,12 +189,19 @@ onUnmounted(cancelTick);
   color: rgba(23, 42, 68, .18);
   cursor: default;
   background: rgba(232,242,255,.5);
+  animation: donePop .3s cubic-bezier(.2,.7,.3,1.5);
+}
+@keyframes donePop{
+  0%{ transform: scale(1); }
+  35%{ transform: scale(1.12); }
+  70%{ transform: scale(.97); }
+  100%{ transform: scale(1); }
 }
 .cell.done::after{
   content:"";
   position: absolute;
-  inset: 12%;
-  border: 2px solid rgba(14,138,153,.55);
+  inset: 10%;
+  border: 2.5px solid rgba(14,138,153,.78);
   border-radius: 50%;
   animation: stampIn .26s cubic-bezier(.2,.7,.3,1.4) both;
 }
@@ -204,20 +211,23 @@ onUnmounted(cancelTick);
 }
 .cell.final-glow{ animation: finalGlow .6s ease both; }
 @keyframes finalGlow{
-  0%{ box-shadow: inset 0 0 0 0 rgba(14,138,153,0); }
-  50%{ box-shadow: inset 0 0 0 100vmax rgba(14,138,153,.22); }
-  100%{ box-shadow: inset 0 0 0 0 rgba(14,138,153,0); }
+  0%{ box-shadow: inset 0 0 0 0 rgba(14,138,153,0); transform: scale(1); }
+  30%{ box-shadow: inset 0 0 0 100vmax rgba(14,138,153,.22); transform: scale(1.12); }
+  60%{ transform: scale(.98); }
+  100%{ box-shadow: inset 0 0 0 0 rgba(14,138,153,0); transform: scale(1); }
 }
 .cell.wrong{
-  animation: wrongShake .3s ease;
-  background: rgba(14,138,153,.18) !important;
-  color: var(--vermilion-deep) !important;
+  animation: wrongShake .36s ease;
+  background: rgba(214,69,65,.20) !important;
+  color: #b8362f !important;
+  box-shadow: inset 0 0 0 2px rgba(214,69,65,.55);
 }
 @keyframes wrongShake{
   0%, 100%{ transform: translateX(0); }
-  20%{ transform: translateX(-4px); }
-  40%{ transform: translateX(4px); }
-  60%{ transform: translateX(-3px); }
-  80%{ transform: translateX(2px); }
+  15%{ transform: translateX(-6px); }
+  35%{ transform: translateX(6px); }
+  55%{ transform: translateX(-5px); }
+  75%{ transform: translateX(4px); }
+  90%{ transform: translateX(-2px); }
 }
 </style>

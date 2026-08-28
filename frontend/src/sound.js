@@ -28,11 +28,13 @@ function tone(freq, dur, type, gain, delay) {
 }
 
 export function sndTick(progress) {
-  tone(520 + progress * 480, 0.09, 'sine', 0.07);
+  const base = 520 + progress * 480;
+  tone(base, 0.07, 'triangle', 0.09);
+  tone(base * 2, 0.05, 'sine', 0.04, 0.012);
 }
 export function sndWrong() {
-  tone(170, 0.1, 'sawtooth', 0.05);
-  tone(140, 0.14, 'sawtooth', 0.05, 0.09);
+  tone(160, 0.12, 'sawtooth', 0.08);
+  tone(110, 0.18, 'sawtooth', 0.08, 0.08);
 }
 export function sndDone() {
   tone(523.25, 0.16, 'sine', 0.07);
