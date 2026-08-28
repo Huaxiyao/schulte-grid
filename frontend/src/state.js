@@ -10,6 +10,7 @@ export const state = reactive({
   timerText: '0.00',
   toast: false,
   showResult: false,
+  showLeaderboard: false,
   result: null,
   authError: '',
   muted: getItem('schulte-muted') === '1',

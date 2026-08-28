@@ -12,6 +12,7 @@
     <div class="actions">
       <span class="who">{{ state.user || '' }}</span>
       <button v-if="state.user" class="btn-ghost-mini" @click="logout">退出</button>
+      <button class="btn-ghost-mini" @click="state.showLeaderboard = true">榜单</button>
       <button class="btn-ink" @click="emit('restart')">重新开始</button>
       <button class="btn-icon" :aria-label="state.muted ? '开启音效' : '关闭音效'" @click="toggleMute">
         <svg v-if="!state.muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>

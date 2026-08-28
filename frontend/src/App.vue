@@ -17,6 +17,7 @@
     <ResultDialog @again="restart" @close="state.showResult = false" />
     <AuthDialog @entered="restart" />
     <AppToast />
+    <Leaderboard />
   </div>
 </template>
 
@@ -31,6 +32,7 @@ import SchulteBoard from './components/SchulteBoard.vue';
 import ResultDialog from './components/ResultDialog.vue';
 import AuthDialog from './components/AuthDialog.vue';
 import AppToast from './components/AppToast.vue';
+import Leaderboard from './components/Leaderboard.vue';
 
 const boardRef = ref(null);
 
