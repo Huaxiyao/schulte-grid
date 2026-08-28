@@ -189,12 +189,11 @@ onUnmounted(cancelTick);
   color: rgba(23, 42, 68, .18);
   cursor: default;
   background: rgba(232,242,255,.5);
-  animation: donePop .2s cubic-bezier(.3,.6,.3,1.2);
+  animation: donePop .26s cubic-bezier(.2,.6,.35,1);
 }
 @keyframes donePop{
   0%{ transform: scale(1); }
-  20%{ transform: scale(1.14); }
-  55%{ transform: scale(.96); }
+  30%{ transform: scale(1.10); }
   100%{ transform: scale(1); }
 }
 .cell.done::after{
