@@ -1,35 +1,34 @@
 @echo off
-chcp 65001 >nul
 cd /d %~dp0
-title èˆ’å°”ç‰¹æ–¹æ ¼ Â· è´¦å·å­˜æ¡£æœåŠ¡
+title Êæ¶ûÌØ·½¸ñ ¡¤ ÕËºÅ´æµµ·þÎñ
 
 if not exist "node_modules" (
-  echo  é¦–æ¬¡ä½¿ç”¨ï¼Œæ­£åœ¨å®‰è£…ä¾èµ–...
+  echo  Ê×´ÎÊ¹ÓÃ£¬ÕýÔÚ°²×°ÒÀÀµ...
   call npm install
   if errorlevel 1 (
-    echo  ä¾èµ–å®‰è£…å¤±è´¥ï¼Œè¯·æ£€æŸ¥ Node çŽ¯å¢ƒ
+    echo  ÒÀÀµ°²×°Ê§°Ü£¬Çë¼ì²é Node »·¾³
     pause
     exit /b 1
   )
 )
 
 if not exist "frontend\dist\index.html" (
-  echo  å‰ç«¯å°šæœªæž„å»ºï¼Œæ­£åœ¨æž„å»º...
+  echo  Ç°¶ËÉÐÎ´¹¹½¨£¬ÕýÔÚ¹¹½¨...
   call npm run build
   if errorlevel 1 (
-    echo  å‰ç«¯æž„å»ºå¤±è´¥ï¼Œè¯·é‡æ–°æ‰§è¡Œ npm run build
+    echo  Ç°¶Ë¹¹½¨Ê§°Ü£¬ÇëÖØÐÂÖ´ÐÐ npm run build
     pause
     exit /b 1
   )
 )
 
-echo  æ£€æŸ¥æœåŠ¡æ˜¯å¦å·²åœ¨è¿è¡Œ...
+echo  ¼ì²é·þÎñÊÇ·ñÒÑÔÚÔËÐÐ...
 netstat -ano | findstr "0.0.0.0:3000" | findstr "LISTENING" >nul
 if %errorlevel%==0 (
-  echo  æœåŠ¡å·²åœ¨è¿è¡Œï¼Œç›´æŽ¥æ‰“å¼€é¡µé¢
+  echo  ·þÎñÒÑÔÚÔËÐÐ£¬Ö±½Ó´ò¿ªÒ³Ãæ
 ) else (
-  echo  æ­£åœ¨å¯åŠ¨æœåŠ¡...
-  start "" /min cmd /c "cd /d %~dp0 && npm start"
+  echo  ÕýÔÚÆô¶¯·þÎñ...
+  start "" /min cmd /c "cd /d %~dp0backend && node server.js"
   timeout /t 2 /nobreak >nul
 )
 
