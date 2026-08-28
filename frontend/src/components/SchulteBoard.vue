@@ -77,7 +77,7 @@ function onCell(num, cell) {
     void cell.offsetWidth;
     cell.classList.add('wrong');
     sndWrong();
-    setTimeout(() => cell.classList.remove('wrong'), 380);
+    setTimeout(() => cell.classList.remove('wrong'), 320);
   }
 }
 
@@ -176,7 +176,7 @@ onUnmounted(cancelTick);
   touch-action: none;
   animation: cellIn .5s cubic-bezier(.2,.7,.3,1.2) both;
   animation-delay: calc(var(--i, 0) * 16ms);
-  transition: background .15s ease, transform .06s ease, color .18s ease, box-shadow .15s ease;
+  transition: background .15s ease, transform .03s ease, color .18s ease, box-shadow .15s ease;
 }
 .cell:hover{ background: rgba(220,235,255,.7); }
 .cell:active{ transform: scale(.94); }
@@ -189,12 +189,12 @@ onUnmounted(cancelTick);
   color: rgba(23, 42, 68, .18);
   cursor: default;
   background: rgba(232,242,255,.5);
-  animation: donePop .3s cubic-bezier(.2,.7,.3,1.5);
+  animation: donePop .2s cubic-bezier(.3,.6,.3,1.2);
 }
 @keyframes donePop{
   0%{ transform: scale(1); }
-  35%{ transform: scale(1.12); }
-  70%{ transform: scale(.97); }
+  20%{ transform: scale(1.14); }
+  55%{ transform: scale(.96); }
   100%{ transform: scale(1); }
 }
 .cell.done::after{
@@ -203,7 +203,7 @@ onUnmounted(cancelTick);
   inset: 10%;
   border: 2.5px solid rgba(14,138,153,.78);
   border-radius: 50%;
-  animation: stampIn .26s cubic-bezier(.2,.7,.3,1.4) both;
+  animation: stampIn .2s cubic-bezier(.2,.7,.3,1.4) both;
 }
 @keyframes stampIn{
   from{ opacity: 0; transform: scale(1.8) rotate(-12deg); }
@@ -217,17 +217,17 @@ onUnmounted(cancelTick);
   100%{ box-shadow: inset 0 0 0 0 rgba(14,138,153,0); transform: scale(1); }
 }
 .cell.wrong{
-  animation: wrongShake .36s ease;
+  animation: wrongShake .3s ease;
   background: rgba(214,69,65,.20) !important;
   color: #b8362f !important;
   box-shadow: inset 0 0 0 2px rgba(214,69,65,.55);
 }
 @keyframes wrongShake{
   0%, 100%{ transform: translateX(0); }
-  15%{ transform: translateX(-6px); }
-  35%{ transform: translateX(6px); }
-  55%{ transform: translateX(-5px); }
-  75%{ transform: translateX(4px); }
-  90%{ transform: translateX(-2px); }
+  12%{ transform: translateX(-7px); }
+  28%{ transform: translateX(7px); }
+  45%{ transform: translateX(-5px); }
+  62%{ transform: translateX(4px); }
+  80%{ transform: translateX(-2px); }
 }
 </style>
