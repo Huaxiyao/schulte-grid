@@ -137,6 +137,25 @@ onUnmounted(cancelTick);
   border-radius: 4px;
   overflow: hidden;
 }
+.progress{
+  margin-top: 14px;
+  height: 3px;
+  background: rgba(23, 42, 68, .12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress i{
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #7fd3e0 0%, var(--vermilion) 100%);
+  box-shadow: 0 0 8px rgba(17,167,184,.35);
+  transition: width .3s cubic-bezier(.2,.7,.2,1);
+}
+</style>
+
+<!-- 格子由 document.createElement 动态创建，无 scoped 属性，样式须全局生效 -->
+<style>
 .cell{
   position: relative;
   display: grid;
@@ -200,20 +219,5 @@ onUnmounted(cancelTick);
   40%{ transform: translateX(4px); }
   60%{ transform: translateX(-3px); }
   80%{ transform: translateX(2px); }
-}
-.progress{
-  margin-top: 14px;
-  height: 3px;
-  background: rgba(23, 42, 68, .12);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.progress i{
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(to right, #7fd3e0 0%, var(--vermilion) 100%);
-  box-shadow: 0 0 8px rgba(17,167,184,.35);
-  transition: width .3s cubic-bezier(.2,.7,.2,1);
 }
 </style>
