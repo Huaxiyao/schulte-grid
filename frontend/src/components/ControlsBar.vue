@@ -42,16 +42,16 @@ function logout() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 10px;
   flex-wrap: wrap;
   animation: fadeUp .8s .12s cubic-bezier(.2,.7,.2,1) both;
 }
-.sizes{ display: flex; gap: 8px; }
+.sizes{ display: flex; gap: 6px; }
 .size-btn{
   font-family: var(--num-font);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
-  padding: 7px 14px;
+  padding: 6px 11px;
   background: transparent;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -66,13 +66,13 @@ function logout() {
   color: #fff;
   box-shadow: var(--glow);
 }
-.actions{ display: flex; gap: 8px; align-items: center; }
+.actions{ display: flex; gap: 6px; align-items: center; }
 .btn-ink{
   font-family: var(--serif-cn);
-  font-size: 14px;
-  letter-spacing: .2em;
-  text-indent: .2em;
-  padding: 9px 20px;
+  font-size: 13px;
+  letter-spacing: .12em;
+  text-indent: .12em;
+  padding: 8px 14px;
   background: rgba(248,252,255,.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -105,7 +105,7 @@ function logout() {
   letter-spacing: .15em;
   color: var(--ink-soft);
   align-self: center;
-  max-width: 130px;
+  max-width: 96px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -116,7 +116,7 @@ function logout() {
   font-size: 12px;
   letter-spacing: .15em;
   text-indent: .15em;
-  padding: 7px 14px;
+  padding: 6px 11px;
   background: rgba(248,252,255,.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
