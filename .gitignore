@@ -2,3 +2,4 @@ node_modules/
 dist/
 schulte.db*
 *.log
+.idea/
