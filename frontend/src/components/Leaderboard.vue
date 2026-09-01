@@ -15,7 +15,9 @@
       </div>
       <div class="lb-list">
         <div v-if="loading" class="lb-empty">载入中…</div>
-        <div v-else-if="rows.length === 0" class="lb-empty">虚位以待<br><small>抢先完成一局即可上榜</small></div>
+        <div v-else-if="rows.length === 0" class="lb-empty">
+          虚位以待<br><small>{{ state.user ? '抢先完成一局即可上榜' : '登录后完成一局即可上榜' }}</small>
+        </div>
         <div
           v-for="(row, i) in rows"
           v-else

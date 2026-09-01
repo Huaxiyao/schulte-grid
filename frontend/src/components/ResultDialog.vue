@@ -14,6 +14,7 @@
         <button class="btn-main" @click="emit('again')">再来一局</button>
         <button class="btn-ghost" @click="emit('close')">收起</button>
       </div>
+      <p v-if="!state.token" class="guest-hint">游客模式 · 登录以同步记录</p>
     </div>
   </div>
 </template>
@@ -180,4 +181,11 @@ const result = computed(() => state.result);
   transition: all .22s ease;
 }
 .btn-ghost:hover{ border-color: var(--vermilion); color: var(--vermilion); }
+.guest-hint{
+  margin-top: 16px;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-indent: .18em;
+  color: var(--ink-faint);
+}
 </style>

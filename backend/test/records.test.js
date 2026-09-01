@@ -51,3 +51,23 @@ test('无效难度 / 无效成绩返回 400', async () => {
   assert.equal((await send({ size: 7, time: 10 })).status, 400);
   assert.equal((await send({ size: 5, time: -1 })).status, 400);
 });
+
+test('低于该难度下限的成绩返回 400', async () => {
+  const app = makeApp();
+  const token = await register(app);
+  const send = (body) => http(app).post('/api/record').set('x-token', token).send(body);
+  assert.equal((await send({ size: 5, time: 0.01 })).status, 400);
+  assert.equal((await send({ size: 3, time: 0.2 })).status, 400);
+  assert.equal((await send({ size: 5, time: 1.2 })).status, 200);
+});
+
+test('每分钟最多 10 次提交，超出被限速', async () => {
+  const app = makeApp();
+  const token = await register(app);
+  for (let i = 0; i < 10; i++) {
+    const r = await http(app).post('/api/record').set('x-token', token).send({ size: 3, time: 10 + i });
+    assert.equal(r.status, 200);
+  }
+  const res = await http(app).post('/api/record').set('x-token', token).send({ size: 3, time: 30 });
+  assert.equal(res.status, 429);
+});

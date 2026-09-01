@@ -37,6 +37,16 @@ describe('api', () => {
     expect(state.showAuth).toBe(true);
   });
 
+  it('游客收到 401 不弹登录框', async () => {
+    vi.stubGlobal('fetch', vi.fn(() =>
+      Promise.resolve(new Response(JSON.stringify({ ok: false, error: '未登录' }), { status: 401 }))
+    ));
+    const res = await api('/leaderboard');
+    expect(res.ok).toBe(false);
+    expect(state.token).toBe(null);
+    expect(state.showAuth).toBe(false);
+  });
+
   it('POST json 请求体正确序列化', async () => {
     vi.stubGlobal('fetch', vi.fn(() =>
       Promise.resolve(new Response(JSON.stringify({ ok: true }), { status: 200 }))

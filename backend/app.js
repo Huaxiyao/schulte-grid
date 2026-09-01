@@ -4,17 +4,18 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createAuth } from './auth.js';
 import { createAuthRoutes } from './routes/authRoutes.js';
-import { createRecordRoutes } from './routes/recordRoutes.js';
+import { createRecordRoutes, createLeaderboardRoutes } from './routes/recordRoutes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function createApp(db) {
   const app = express();
-  const { requireAuth } = createAuth(db);
+  const auth = createAuth(db);
 
   app.use(express.json({ limit: '100kb' }));
-  app.use('/api', createAuthRoutes(db));
-  app.use('/api', requireAuth);
+  app.use('/api', createAuthRoutes(db, auth));
+  app.use('/api', createLeaderboardRoutes(db)); // 榜单对游客开放
+  app.use('/api', auth.requireAuth);
   app.use('/api', createRecordRoutes(db));
 
   const dist = path.join(__dirname, '..', 'frontend', 'dist');

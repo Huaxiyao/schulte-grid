@@ -28,8 +28,14 @@ export function createDb(file = process.env.SCHULTE_DB || DEFAULT_DB) {
       token      TEXT PRIMARY KEY,
       username   TEXT NOT NULL,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      expires_at TEXT NOT NULL DEFAULT (datetime('now', '+30 days')),
       FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
     );
   `);
+  const sessionCols = db.prepare('PRAGMA table_info(sessions)').all();
+  if (sessionCols.length > 0 && !sessionCols.some((c) => c.name === 'expires_at')) {
+    db.exec('ALTER TABLE sessions ADD COLUMN expires_at TEXT');
+    db.exec("UPDATE sessions SET expires_at = datetime('now', '+30 days')");
+  }
   return db;
 }

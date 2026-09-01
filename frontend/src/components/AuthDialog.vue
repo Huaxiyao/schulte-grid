@@ -7,18 +7,20 @@
         <button :class="{ active: mode === 'login' }" @click="setMode('login')">登录</button>
         <button :class="{ active: mode === 'register' }" @click="setMode('register')">注册</button>
       </div>
-      <input class="auth-input" v-model="username" placeholder="用户名" maxlength="16" autocomplete="username">
+      <input class="auth-input" v-model="username" placeholder="用户名" maxlength="16" autocomplete="username"
+             autocapitalize="off" autocorrect="off" spellcheck="false" @keydown.enter="focusPass">
       <div class="pass-wrap">
-        <input class="auth-input" v-model="password" :type="showPass ? 'text' : 'password'"
+        <input ref="passRef" class="auth-input" v-model="password" :type="showPass ? 'text' : 'password'"
                :placeholder="mode === 'login' ? '密码' : '密码（至少 4 位）'"
-               maxlength="64" autocomplete="current-password" @keydown.enter="submit">
-        <button class="pass-eye" :aria-label="showPass ? '隐藏密码' : '显示密码'" @click="showPass = !showPass">
+               maxlength="64" :autocomplete="mode === 'login' ? 'current-password' : 'new-password'" @keydown.enter="submit">
+        <button class="pass-eye" :aria-label="showPass ? '隐藏密码' : '显示密码'" :aria-pressed="showPass" @click="showPass = !showPass">
           <svg v-if="!showPass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
         </button>
       </div>
       <p class="auth-error" :class="{ shake: shake }">{{ state.authError }}</p>
       <button class="auth-submit" :disabled="busy" @click="submit">{{ mode === 'login' ? '登　录' : '注　册' }}</button>
+      <button class="auth-skip" @click="skip">暂不登录，直接游玩</button>
       <p class="auth-hint">数据保存在本机 schulte.db</p>
     </div>
   </div>
@@ -34,9 +36,14 @@ const emit = defineEmits(['entered']);
 const mode = ref('login');
 const username = ref('');
 const password = ref('');
+const passRef = ref(null);
 const showPass = ref(false);
 const shake = ref(false);
 const busy = ref(false);
+
+function focusPass() {
+  passRef.value && passRef.value.focus();
+}
 
 function setMode(m) {
   mode.value = m;
@@ -46,6 +53,10 @@ function fail(msg) {
   state.authError = msg;
   shake.value = true;
   setTimeout(() => { shake.value = false; }, 320);
+}
+function skip() {
+  state.showAuth = false;
+  state.authError = '';
 }
 async function submit() {
   const name = username.value.replace(/^\s+|\s+$/g, '');
@@ -175,7 +186,7 @@ async function submit() {
   margin-top: 16px;
   padding: 13px 16px;
   font-family: var(--serif-cn);
-  font-size: 15px;
+  font-size: 16px;
   color: var(--ink);
   background: rgba(240, 248, 252, 0.75);
   border: 1px solid var(--line);
@@ -192,6 +203,8 @@ async function submit() {
 .auth-input::placeholder{ color: var(--ink-faint); letter-spacing: .05em; }
 .pass-wrap{ position: relative; }
 .pass-wrap .auth-input{ padding-right: 48px; }
+.auth-input::-ms-reveal,
+.auth-input::-ms-clear{ display: none; }
 .pass-eye{
   position: absolute;
   right: 6px; top: 50%;
@@ -243,6 +256,19 @@ async function submit() {
 }
 .auth-submit:active{ transform: scale(.97); }
 .auth-submit:disabled{ opacity: .6; cursor: default; filter: none; }
+.auth-skip{
+  display: block;
+  margin: 14px auto 0;
+  padding: 4px 10px;
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  letter-spacing: .15em;
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: color .2s ease;
+}
+.auth-skip:hover{ color: var(--vermilion); }
 .auth-hint{
   margin-top: 18px;
   padding-top: 14px;

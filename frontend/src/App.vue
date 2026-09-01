@@ -45,10 +45,6 @@ async function checkSession() {
   if (res.ok) {
     state.records = res.records || {};
     restart();
-  } else {
-    // 401 时 api() 已 clearSession（showAuth=true），此处兜底网络失败等场景
-    state.authError = res.error || '';
-    state.showAuth = true;
   }
 }
 function onKeydown(e) {
@@ -63,13 +59,9 @@ function onVisibility() {
     boardRef.value.voidRound();
   }
 }
-const prevent = (e) => e.preventDefault();
-
 onMounted(() => {
   document.addEventListener('keydown', onKeydown);
   document.addEventListener('visibilitychange', onVisibility);
-  window.addEventListener('wheel', prevent, { passive: false });
-  window.addEventListener('touchmove', prevent, { passive: false });
   document.onselectstart = () => false;
   document.addEventListener('pointerdown', ensureAudio, { once: true });
   if (state.token && state.user) checkSession();
@@ -77,8 +69,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', onKeydown);
   document.removeEventListener('visibilitychange', onVisibility);
-  window.removeEventListener('wheel', prevent);
-  window.removeEventListener('touchmove', prevent);
 });
 </script>
 

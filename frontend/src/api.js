@@ -14,6 +14,6 @@ export async function api(path, opts = {}) {
   } catch {
     return { ok: false, error: '无法连接服务器，请先启动服务' };
   }
-  if (res.status === 401) clearSession();
+  if (res.status === 401 && state.token) clearSession();
   return res.json().catch(() => ({}));
 }

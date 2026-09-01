@@ -41,11 +41,12 @@ test('同一用户各难度独立排名，最多返回 10 人', async () => {
   assert.deepEqual(res3.body.list.map(r => r.username), ['选手甲']);
 });
 
-test('未登录 / 非法难度被拒绝', async () => {
+test('游客可查看排行榜，非法难度返回 400', async () => {
   const app = makeApp();
   const noAuth = await http(app).get('/api/leaderboard?size=5');
-  assert.equal(noAuth.status, 401);
-  const token = await registerAs(app, '选手甲');
-  const bad = await http(app).get('/api/leaderboard?size=7').set('x-token', token);
+  assert.equal(noAuth.status, 200);
+  assert.equal(noAuth.body.ok, true);
+  assert.deepEqual(noAuth.body.list, []);
+  const bad = await http(app).get('/api/leaderboard?size=7');
   assert.equal(bad.status, 400);
 });

@@ -7,7 +7,7 @@
 
 <script setup>
 import { ref, watch, onUnmounted } from 'vue';
-import { state } from '../state.js';
+import { state, saveGuestRecords } from '../state.js';
 import { api } from '../api.js';
 import { shuffled, fmt, ratingFor } from '../gameLogic.js';
 import { ensureAudio, sndTick, sndWrong, sndDone, sndVoid } from '../sound.js';
@@ -77,7 +77,7 @@ function onCell(num, cell) {
     void cell.offsetWidth;
     cell.classList.add('wrong');
     sndWrong();
-    setTimeout(() => cell.classList.remove('wrong'), 320);
+    setTimeout(() => cell.classList.remove('wrong'), 120);
   }
 }
 
@@ -91,8 +91,12 @@ function finish() {
   const isRecord = best === null || t < best;
   if (isRecord) {
     state.records[String(state.size)] = t;
-    api('/record', { json: { size: state.size, time: Math.round(t * 100) / 100 } })
-      .then((res) => { if (res.ok) state.records[String(state.size)] = res.best; });
+    if (state.token) {
+      api('/record', { json: { size: state.size, time: Math.round(t * 100) / 100 } })
+        .then((res) => { if (res.ok) state.records[String(state.size)] = res.best; });
+    } else {
+      saveGuestRecords(state.records); // 游客成绩存本机，刷新不丢
+    }
   }
   const secPerCell = t / total;
   state.result = {
@@ -216,7 +220,7 @@ onUnmounted(cancelTick);
   100%{ box-shadow: inset 0 0 0 0 rgba(14,138,153,0); transform: scale(1); }
 }
 .cell.wrong{
-  animation: wrongShake .3s ease;
+  animation: wrongShake .12s ease;
   background: rgba(214,69,65,.20) !important;
   color: #b8362f !important;
   box-shadow: inset 0 0 0 2px rgba(214,69,65,.55);

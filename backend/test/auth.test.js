@@ -52,3 +52,45 @@ test('退出登录后令牌失效', async () => {
   const after = await http(app).get('/api/records').set('x-token', reg.body.token);
   assert.equal(after.status, 401);
 });
+
+test('过期会话返回 401，且在下次登录时被清理', async () => {
+  const app = makeApp();
+  const reg = await http(app).post('/api/register').send({ username: '小明', password: '1234' });
+  app.db.prepare("UPDATE sessions SET expires_at = datetime('now', '-1 second')").run();
+  const res = await http(app).get('/api/records').set('x-token', reg.body.token);
+  assert.equal(res.status, 401);
+  // 认证路径保持只读；过期会话由登录/注册时的低频清理回收
+  await http(app).post('/api/login').send({ username: '小明', password: '1234' });
+  const left = app.db.prepare('SELECT COUNT(*) AS n FROM sessions').get();
+  assert.equal(left.n, 1);
+});
+
+test('未过期会话正常使用', async () => {
+  const app = makeApp();
+  const reg = await http(app).post('/api/register').send({ username: '小明', password: '1234' });
+  const res = await http(app).get('/api/records').set('x-token', reg.body.token);
+  assert.equal(res.status, 200);
+});
+
+function daysLeft(app, token) {
+  const row = app.db.prepare('SELECT expires_at FROM sessions WHERE token = ?').get(token);
+  return (Date.parse(row.expires_at.replace(' ', 'T') + 'Z') - Date.now()) / 86400000;
+}
+
+test('剩余不足 15 天的会话自动续期到约 30 天', async () => {
+  const app = makeApp();
+  const reg = await http(app).post('/api/register').send({ username: '小明', password: '1234' });
+  app.db.prepare("UPDATE sessions SET expires_at = datetime('now', '+10 days')").run();
+  const res = await http(app).get('/api/records').set('x-token', reg.body.token);
+  assert.equal(res.status, 200);
+  assert.ok(daysLeft(app, reg.body.token) > 28, '应续期到约 30 天');
+});
+
+test('剩余超过 15 天的会话不触发续期', async () => {
+  const app = makeApp();
+  const reg = await http(app).post('/api/register').send({ username: '小明', password: '1234' });
+  app.db.prepare("UPDATE sessions SET expires_at = datetime('now', '+20 days')").run();
+  await http(app).get('/api/records').set('x-token', reg.body.token);
+  const left = daysLeft(app, reg.body.token);
+  assert.ok(left < 25 && left > 15, '不应续期，实际剩余 ' + left + ' 天');
+});
