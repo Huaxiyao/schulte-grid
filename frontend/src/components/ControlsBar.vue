@@ -32,6 +32,7 @@ const emit = defineEmits(['restart']);
 function logout() {
   api('/logout', { json: {} });
   clearSession();
+  state.showAuth = false; // 主动退出保持游客游玩，不弹登录框（弹框仅用于令牌失效）
 }
 </script>
 
