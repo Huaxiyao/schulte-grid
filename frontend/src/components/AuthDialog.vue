@@ -30,6 +30,7 @@
 import { ref } from 'vue';
 import { state, saveAccount } from '../state.js';
 import { api } from '../api.js';
+import { syncGuestRecords } from '../sync.js';
 
 const emit = defineEmits(['entered']);
 
@@ -67,9 +68,10 @@ async function submit() {
   const res = await api(mode.value === 'login' ? '/login' : '/register', { json: { username: name, password: password.value } });
   busy.value = false;
   if (res.ok) {
-    saveAccount(res.token, res.username, {});
     const rec = await api('/records');
-    if (rec.ok) state.records = rec.records || {};
+    const serverRecords = rec.ok ? (rec.records || {}) : {};
+    saveAccount(res.token, res.username, serverRecords);
+    await syncGuestRecords(serverRecords);
     username.value = '';
     password.value = '';
     setMode('login');

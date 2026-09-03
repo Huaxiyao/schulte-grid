@@ -23,8 +23,9 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { state } from './state.js';
+import { state, mergeRecords, loadGuestRecords } from './state.js';
 import { api } from './api.js';
+import { syncGuestRecords } from './sync.js';
 import { ensureAudio } from './sound.js';
 import ControlsBar from './components/ControlsBar.vue';
 import StatsBar from './components/StatsBar.vue';
@@ -43,7 +44,8 @@ function restart() {
 async function checkSession() {
   const res = await api('/records');
   if (res.ok) {
-    state.records = res.records || {};
+    state.records = mergeRecords(loadGuestRecords(), res.records);
+    await syncGuestRecords(res.records);
     restart();
   }
 }

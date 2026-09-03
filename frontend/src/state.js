@@ -22,7 +22,7 @@ export function saveGuestRecords(records) {
   setItem(GUEST_KEY, JSON.stringify(records));
 }
 
-function mergeRecords(guest, server) {
+export function mergeRecords(guest, server) {
   const merged = {};
   for (const k of new Set([...Object.keys(guest || {}), ...Object.keys(server || {})])) {
     const g = guest?.[k];
