@@ -16,7 +16,7 @@ npm workspaces 单仓多包，依赖提升到根 `node_modules`：
 ├─ package.json          # workspaces + 根脚本（dev/build/start/test）
 ├─ frontend/             # Vue 3 + Vite（独立 npm 包）
 │  ├─ vite.config.js     # PWA manifest/SW 配置；dev 端口 5175，代理 /api → 3000
-│  ├─ public/            # 背景插画（哈希名 jpg，style.css 引用）、PWA 图标
+│  ├─ public/            # 背景插画（bg-misty-lake.jpg，Pexels 自由授权素材，style.css 引用）、PWA 图标
 │  └─ src/
 │     ├─ App.vue         # 布局根：组装组件、全局键盘/visibilitychange 监听、会话恢复
 │     ├─ state.js        # reactive 全局状态单例 + 游客记录持久化/合并

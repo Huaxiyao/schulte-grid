@@ -24,7 +24,7 @@ body{
       rgba(240, 250, 253, 0.20) 34%,
       rgba(234, 246, 250, 0.68) 66%,
       rgba(232, 245, 250, 0.92) 100%),
-    url("/4d314a555e2d89e91f7a579c9db11cb7.jpg") 24% 6% / cover no-repeat fixed,
+    url("/bg-misty-lake.jpg") 50% 35% / cover no-repeat fixed,
     #e4f2f5;
   min-height: 100%;
   position: relative;

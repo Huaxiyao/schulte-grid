@@ -24,3 +24,7 @@ npm test           # 运行前后端测试
 ## 数据
 
 账号与成绩存于根目录 `schulte.db`（SQLite，运行时生成，已 gitignore），含 users / records / sessions 三张表。
+
+## 素材
+
+背景插画来自 [Pexels](https://www.pexels.com/photo/tranquil-misty-mountain-and-lake-landscape-38951780/)（Pexels License，可自由使用，无需署名）。
