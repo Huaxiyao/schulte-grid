@@ -3,3 +3,5 @@ dist/
 schulte.db*
 *.log
 .idea/
+.mimosa/
+.v2c/

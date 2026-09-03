@@ -17,7 +17,7 @@ npm start          # 启动服务，访问 http://localhost:3000
 ## 开发
 
 ```bash
-npm run dev        # 同时启动 Vite(5173) 与 Express(3000)，热更新
+npm run dev        # 同时启动 Vite(5175) 与 Express(3000)，热更新；开发访问 http://localhost:5175
 npm test           # 运行前后端测试
 ```
 
