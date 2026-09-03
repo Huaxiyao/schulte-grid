@@ -53,6 +53,14 @@ npm workspaces 单仓多包，依赖提升到根 `node_modules`：
 
 注意：README 开发一节写的 Vite 端口 5173 已过时，实际固定 5175（strictPort），原因是本机 pm2 占用 5173/5174。
 
+## Git 与远程
+
+- 远程仓库：https://github.com/Huaxiyao/schulte-grid（公开），本地已配 `origin`，默认分支 `main`；更新线上代码只需 `git push`
+- 大陆网络需代理：本机已配 `git config --global http.proxy http://127.0.0.1:7897`（Clash Verge）；gh CLI 走同端口（临时会话需 `export HTTPS_PROXY=http://127.0.0.1:7897`）
+- GitHub 凭据走 gh CLI（`gh auth login`，Windows keyring），`gh auth setup-git` 已让 git 复用
+- CI：`.github/workflows/test.yml`，push/PR 自动跑 `npm test`（Node 22/24 矩阵），改动后端/前端逻辑后留意远端运行结果
+- 旧版单文件 HTML（schulte-grid.html 等）已从线上移除，存档于本地 tag `archive/legacy-single-html`，需要可推回
+
 ## 后端关键约定
 
 ### API 契约（前端依赖，勿随意改动）
