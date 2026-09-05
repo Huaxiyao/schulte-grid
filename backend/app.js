@@ -25,6 +25,10 @@ export function createApp(db) {
   app.use((err, req, res, next) => {
     if (res.headersSent) return next(err);
     const status = err.status || err.statusCode || 500;
+    if (status >= 500) {
+      // 5xx 对客户端隐藏细节，但堆栈要落日志供排查
+      console.error(`[error] ${req.method} ${req.originalUrl}`, err.stack || err);
+    }
     res.status(status).json({ ok: false, error: status >= 500 ? '服务器内部错误' : err.message });
   });
   return app;
