@@ -15,6 +15,15 @@ describe('api', () => {
     expect(res.error).toContain('无法连接服务器');
   });
 
+  it('非 JSON 响应（后端未启动时代理回 500 页）返回明确错误', async () => {
+    vi.stubGlobal('fetch', vi.fn(() =>
+      Promise.resolve(new Response('<html>Internal Server Error</html>', { status: 500 }))
+    ));
+    const res = await api('/login', { json: { username: 'stajia', password: 'x' } });
+    expect(res.ok).toBe(false);
+    expect(res.error).toContain('后端');
+  });
+
   it('自动附带 x-token 请求头', async () => {
     saveAccount('tok123', '小明', {});
     vi.stubGlobal('fetch', vi.fn(() =>
