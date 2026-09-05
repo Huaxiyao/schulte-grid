@@ -12,11 +12,14 @@
       <ControlsBar @restart="restart" />
       <StatsBar />
       <SchulteBoard ref="boardRef" />
-      <p class="tip">首次点击即刻起针 · 依序点按 1 至 N · 按 R 重开</p>
+      <Transition name="tipswap" mode="out-in">
+        <p v-if="state.toast" key="void" class="tip tip-void">中途切出 · 本局作废 · 按 R 或空格重开</p>
+        <p v-else key="hint" class="tip">首次点击即刻起针 · 依序点按 1 至 N · 按 R 重开</p>
+      </Transition>
     </main>
     <ResultDialog @again="restart" @close="state.showResult = false" />
     <AuthDialog @entered="restart" />
-    <AppToast />
+    <Leaderboard />
     <Leaderboard />
   </div>
 </template>
@@ -32,7 +35,6 @@ import StatsBar from './components/StatsBar.vue';
 import SchulteBoard from './components/SchulteBoard.vue';
 import ResultDialog from './components/ResultDialog.vue';
 import AuthDialog from './components/AuthDialog.vue';
-import AppToast from './components/AppToast.vue';
 import Leaderboard from './components/Leaderboard.vue';
 
 const boardRef = ref(null);
@@ -127,4 +129,14 @@ h1{
   text-align: center;
   animation: fadeUp .8s .36s cubic-bezier(.2,.7,.2,1) both;
 }
+.tip-void{
+  color: var(--vermilion-deep);
+  font-weight: 600;
+}
+.tipswap-enter-active,
+.tipswap-leave-active{
+  transition: opacity .22s ease, transform .22s ease;
+}
+.tipswap-enter-from{ opacity: 0; transform: translateY(6px); }
+.tipswap-leave-to{ opacity: 0; transform: translateY(-6px); }
 </style>

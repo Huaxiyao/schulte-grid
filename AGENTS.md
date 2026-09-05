@@ -26,7 +26,7 @@ npm workspaces 单仓多包，依赖提升到根 `node_modules`：
 │     ├─ sound.js        # Web Audio 振荡器音效（无需音频文件）
 │     ├─ storage.js      # localStorage 包装，异常时退回内存对象
 │     ├─ style.css       # 全局 CSS 变量、背景、keyframes
-│     └─ components/     # ControlsBar / StatsBar / SchulteBoard / ResultDialog / AuthDialog / Leaderboard / AppToast
+│     └─ components/     # ControlsBar / StatsBar / SchulteBoard / ResultDialog / AuthDialog / Leaderboard
 ├─ backend/              # Express（独立 npm 包）
 │  ├─ server.js          # 入口：createDb + createApp + listen
 │  ├─ app.js             # 装配路由、静态托管 frontend/dist、404/错误中间件
@@ -112,7 +112,8 @@ auth 路由 → leaderboard 路由 → `auth.requireAuth` → record 路由。�
 - 首次正确点击才起表；计时用 `performance.now()` + rAF 循环更新 `state.timerText`
 - 只响应鼠标左键 / 触摸 pointerdown；错点抖动+计失误；页面 hidden 时 `voidRound()` 作废本局（App.vue 统一监听 visibilitychange）
 - 完赛上报前 `Math.round(t*100)/100` 保留两位
-- 通过 `defineExpose({ restart, voidRound })` 供 App.vue ref 调用；`watch(state.size)` 自动开新局
+- 通过 `defineExpose({ restart, voidRound })` 供 App.vue ref 调用；`watch(state.size)` 自动开新局；**组件挂载即 `newGame()`**（首次进入棋盘直接可玩，不依赖会话恢复成功）
+- 中途切出的「本局作废」提示**内联替换**棋盘下方 tip 提示行（`state.toast` 驱动，App.vue 里 Transition 切换），不用 fixed 浮层——矮屏下浮层会挡住棋盘（AppToast 组件已删除）
 
 ### 其他
 
