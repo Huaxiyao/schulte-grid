@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { state, saveGuestRecords, removeGuestRecord } from '../state.js';
 import { api } from '../api.js';
 import { shuffled, fmt, ratingFor } from '../gameLogic.js';
@@ -126,6 +126,7 @@ function voidRound() {
 
 defineExpose({ restart: newGame, voidRound });
 watch(() => state.size, () => newGame());
+onMounted(newGame);
 onUnmounted(cancelTick);
 </script>
 
