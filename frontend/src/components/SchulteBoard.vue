@@ -7,7 +7,7 @@
 
 <script setup>
 import { ref, watch, onUnmounted } from 'vue';
-import { state, saveGuestRecords } from '../state.js';
+import { state, saveGuestRecords, removeGuestRecord } from '../state.js';
 import { api } from '../api.js';
 import { shuffled, fmt, ratingFor } from '../gameLogic.js';
 import { ensureAudio, sndTick, sndWrong, sndDone, sndVoid } from '../sound.js';
@@ -93,7 +93,14 @@ function finish() {
     state.records[String(state.size)] = t;
     if (state.token) {
       api('/record', { json: { size: state.size, time: Math.round(t * 100) / 100 } })
-        .then((res) => { if (res.ok) state.records[String(state.size)] = res.best; });
+        .then((res) => {
+          if (res.ok) {
+            state.records[String(state.size)] = res.best;
+            removeGuestRecord(state.size); // 成绩已入云端，移除本地兜底条目
+          } else {
+            saveGuestRecords(state.records); // 断网/服务器不可达：落本地兜底，会话恢复时自动补传
+          }
+        });
     } else {
       saveGuestRecords(state.records); // 游客成绩存本机，刷新不丢
     }

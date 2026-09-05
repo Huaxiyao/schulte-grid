@@ -22,6 +22,17 @@ export function saveGuestRecords(records) {
   setItem(GUEST_KEY, JSON.stringify(records));
 }
 
+// 登录用户断网上传失败的成绩也会落此本地存储兜底；
+// 该难度确认进入云端（或不再需要）后调用此函数移除，空则删整个 key
+export function removeGuestRecord(size) {
+  const guest = loadGuestRecords();
+  const key = String(size);
+  if (!(key in guest)) return;
+  delete guest[key];
+  if (Object.keys(guest).length === 0) removeItem(GUEST_KEY);
+  else setItem(GUEST_KEY, JSON.stringify(guest));
+}
+
 export function mergeRecords(guest, server) {
   const merged = {};
   for (const k of new Set([...Object.keys(guest || {}), ...Object.keys(server || {})])) {

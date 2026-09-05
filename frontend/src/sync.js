@@ -1,4 +1,4 @@
-import { state, loadGuestRecords } from './state.js';
+import { state, loadGuestRecords, removeGuestRecord } from './state.js';
 import { api } from './api.js';
 
 // 登录或会话恢复后，把本地游客期间更优的成绩同步到服务器。
@@ -10,7 +10,10 @@ export async function syncGuestRecords(serverRecords) {
     const cur = serverRecords[size];
     if (cur === undefined || time < cur) {
       const res = await api('/record', { json: { size: Number(size), time } });
-      if (res.ok) state.records[size] = res.best;
+      if (res.ok) {
+        state.records[size] = res.best;
+        removeGuestRecord(size); // 已入云端，本地兜底条目不再需要
+      }
     }
   }
 }

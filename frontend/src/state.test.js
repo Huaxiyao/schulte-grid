@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
-  state, saveAccount, clearSession, loadGuestRecords, saveGuestRecords,
+  state, saveAccount, clearSession, loadGuestRecords, saveGuestRecords, removeGuestRecord,
 } from './state.js';
-import { setItem, removeItem } from './storage.js';
+import { getItem, setItem, removeItem } from './storage.js';
 
 const GUEST_KEY = 'schulte-guest-records';
 
@@ -27,6 +27,20 @@ describe('游客成绩本地持久化', () => {
   it('损坏的数据返回空对象', () => {
     setItem(GUEST_KEY, 'not-json');
     expect(loadGuestRecords()).toEqual({});
+  });
+
+  it('removeGuestRecord 删除指定难度，清空后移除整个 key', () => {
+    saveGuestRecords({ '3': 6.5, '5': 12.3 });
+    removeGuestRecord('3');
+    expect(loadGuestRecords()).toEqual({ '5': 12.3 });
+    removeGuestRecord('5');
+    expect(getItem(GUEST_KEY)).toBe(null);
+  });
+
+  it('removeGuestRecord 对不存在的条目是 no-op', () => {
+    saveGuestRecords({ '3': 6.5 });
+    removeGuestRecord('6');
+    expect(loadGuestRecords()).toEqual({ '3': 6.5 });
   });
 
   it('登录时云端记录与游客记录合并取最优', () => {

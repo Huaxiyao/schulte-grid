@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { state } from './state.js';
+import { state, loadGuestRecords } from './state.js';
 import { syncGuestRecords } from './sync.js';
 import { setItem, removeItem } from './storage.js';
 
@@ -65,5 +65,22 @@ describe('游客成绩云同步', () => {
     const fn = mockFetch(() => okRes({}));
     await syncGuestRecords({ '3': 10, '5': 30 });
     expect(fn).not.toHaveBeenCalled();
+  });
+
+  it('上传成功后清除本地兜底条目', async () => {
+    setItem(GUEST_KEY, JSON.stringify({ '5': 8 }));
+    state.records = { '5': 8 };
+    const fn = mockFetch(() => okRes({ ok: true, best: 8 }));
+    await syncGuestRecords({ '3': 12 }); // 服务器缺 5×5，补传
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(loadGuestRecords()).toEqual({}); // 已入云端，本地不再残留
+  });
+
+  it('上传失败保留本地条目，待下次会话补传', async () => {
+    setItem(GUEST_KEY, JSON.stringify({ '5': 8 }));
+    const fn = mockFetch(() => okRes({ ok: false, error: '无法连接服务器' }));
+    await syncGuestRecords({});
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(loadGuestRecords()).toEqual({ '5': 8 });
   });
 });
