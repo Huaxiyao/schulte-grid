@@ -12,6 +12,7 @@
     <div class="actions">
       <span class="who">{{ state.user || '' }}</span>
       <button v-if="state.user" class="btn-ghost-mini" @click="logout">退出</button>
+      <button v-else class="btn-ghost-mini" @click="state.showAuth = true">登录</button>
       <button class="btn-ghost-mini" @click="state.showLeaderboard = true">榜单</button>
       <button class="btn-ink" @click="emit('restart')">重新开始</button>
       <button class="btn-icon" :aria-label="state.muted ? '开启音效' : '关闭音效'" @click="toggleMute">
