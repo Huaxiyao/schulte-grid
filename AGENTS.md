@@ -124,7 +124,7 @@ auth 路由 → leaderboard 路由 → `auth.requireAuth` → record 路由。�
 
 ## 视觉 / 代码风格
 
-- 青玉国风：主色 `--vermilion: #0e8a99`（变量名叫 vermilion 但实为青色，历史遗留，勿改）；CSS 变量全部在 `style.css :root`；衬线中文 Noto Serif SC + 数字 Outfit（Google Fonts）
+- 青玉国风：主色 `--vermilion: #0e8a99`（变量名叫 vermilion 但实为青色，历史遗留，勿改）；CSS 变量全部在 `style.css :root`；衬线中文 Noto Serif SC + 数字 Outfit，经 @fontsource 本地自托管并在 main.js 按字重引入（**不要改回 Google Fonts 外链**——外链字体表渲染阻塞，无代理环境白屏到超时；woff2 已进 PWA 预缓存 globPatterns）
 - 组件样式一律 scoped + CSS 变量，动效缓动常用 `cubic-bezier(.2,.7,.2,1)`；数值显示用 `font-variant-numeric: tabular-nums`
 - 界面文案、代码注释、错误提示全部中文；命名英文
 - Git 提交：Conventional Commits + 中文描述（feat/fix/chore/docs/style），交互手感微调专用前缀 `feel:`

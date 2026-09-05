@@ -32,6 +32,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // 字体切片一并预缓存，离线也能用上完整字体
+        globPatterns: ['**/*.{js,css,html,woff2}'],
         // 只缓存前端静态资源；/api 走网络
         navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
