@@ -15,7 +15,7 @@ npm workspaces 单仓多包，依赖提升到根 `node_modules`：
 ```
 ├─ package.json          # workspaces + 根脚本（dev/build/start/test）
 ├─ frontend/             # Vue 3 + Vite（独立 npm 包）
-│  ├─ vite.config.js     # PWA manifest/SW 配置；dev 端口 5175，代理 /api → 后端（默认 3000，跟随 PORT 环境变量）
+│  ├─ vite.config.js     # PWA manifest/SW 配置；dev 端口 5175，代理 /api → 后端（默认 3785，跟随 PORT 环境变量）
 │  ├─ public/            # 背景插画（bg-misty-lake.jpg，Pexels 自由授权素材，style.css 引用）、PWA 图标
 │  └─ src/
 │     ├─ App.vue         # 布局根：组装组件、全局键盘/visibilitychange 监听、会话恢复
@@ -45,15 +45,15 @@ npm workspaces 单仓多包，依赖提升到根 `node_modules`：
 | 命令 | 作用 |
 |---|---|
 | `npm install` | 安装全部 workspace 依赖 |
-| `npm run dev` | concurrently 同起 Vite(5175) + Express(3000，`node --watch`)，访问 http://localhost:5175 |
+| `npm run dev` | concurrently 同起 Vite(5175) + Express(3785，`node --watch`)，访问 http://localhost:5175 |
 | `npm run build` | 构建前端到 `frontend/dist` |
-| `npm start` | 生产：Express 托管 dist + API 同源，访问 :3000（先 build） |
+| `npm start` | 生产：Express 托管 dist + API 同源，访问 :3785（先 build） |
 | `npm test` | 先后端 `node --test` 再前端 `vitest run` |
 | `npm run test --workspace backend` / `--workspace frontend` | 单独跑一端测试 |
 
 注意：README 开发一节写的 Vite 端口 5173 已过时，实际固定 5175（strictPort），原因是本机 pm2 占用 5173/5174。
 
-**端口坑（2026-09-05 实录）**：Hyper-V/WinNAT 每次开机会动态保留端口段（`netsh interface ipv4 show excludedportrange protocol=tcp` 查看），某次开机后 3000 落进保留区间，listen 阶段异步报 EACCES。Windows 上 bind 会"成功"且 listening 回调先于 error 触发，所以 server.js 不挂 error 监听会打出假启动横幅后无声退出（已修复：server.js 监听 error 事件并明确报错）。临时解法：`PORT=3785 npm run dev`（vite 代理跟随 PORT）；永久解法：管理员执行 `netsh int ipv4 set dynamic tcp start=49152 num=16384` 后重启。
+**端口坑（2026-09-05 实录）**：Hyper-V/WinNAT 每次开机会动态保留端口段（`netsh interface ipv4 show excludedportrange protocol=tcp` 查看），某次开机后 3000 落进保留区间，listen 阶段异步报 EACCES。Windows 上 bind 会"成功"且 listening 回调先于 error 触发，所以 server.js 不挂 error 监听会打出假启动横幅后无声退出（已修复：server.js 监听 error 事件并明确报错）。**2026-09-05 起默认端口已从 3000 改为 3785**（server.js 与 vite 代理同步），普通 `npm run dev` 开箱即用；若某天 3785 也被保留段吞掉，用 `PORT=其他端口 npm run dev` 整体换端口；彻底根治仍可管理员执行 `netsh int ipv4 set dynamic tcp start=49152 num=16384` 后重启。
 
 ## Git 与远程
 

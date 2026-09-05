@@ -9,15 +9,15 @@
 ```bash
 npm install        # 首次使用
 npm run build      # 构建前端（首次或前端改动后）
-npm start          # 启动服务，访问 http://localhost:3000
+npm start          # 启动服务，访问 http://localhost:3785
 ```
 
-局域网内手机/其他电脑访问 `http://<本机IP>:3000`。
+局域网内手机/其他电脑访问 `http://<本机IP>:3785`。
 
 ## 开发
 
 ```bash
-npm run dev        # 同时启动 Vite(5175) 与 Express(3000)，热更新；开发访问 http://localhost:5175
+npm run dev        # 同时启动 Vite(5175) 与 Express(3785)，热更新；开发访问 http://localhost:5175
 npm test           # 运行前后端测试
 ```
 

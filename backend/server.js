@@ -1,7 +1,8 @@
 import { createDb } from './db.js';
 import { createApp } from './app.js';
 
-const PORT = Number.parseInt(process.env.PORT || process.argv[2] || '3000', 10) || 3000;
+// 默认 3785：3000 常被 Hyper-V/WinNAT 开机保留段吞掉（EACCES），见 AGENTS.md「端口坑」；PORT 环境变量/首个命令行参数仍可覆盖
+const PORT = Number.parseInt(process.env.PORT || process.argv[2] || '3785', 10) || 3785;
 const db = createDb();
 const app = createApp(db);
 
