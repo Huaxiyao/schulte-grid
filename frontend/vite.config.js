@@ -49,6 +49,7 @@ export default defineConfig({
   server: {
     port: 5175,
     strictPort: true,
-    proxy: { '/api': 'http://localhost:3000' },
+    // 后端端口跟随 PORT 环境变量（server.js 同款），3000 被系统保留时可整体换端口
+    proxy: { '/api': `http://localhost:${process.env.PORT || 3000}` },
   },
 });

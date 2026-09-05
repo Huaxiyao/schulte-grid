@@ -15,7 +15,7 @@ npm workspaces 单仓多包，依赖提升到根 `node_modules`：
 ```
 ├─ package.json          # workspaces + 根脚本（dev/build/start/test）
 ├─ frontend/             # Vue 3 + Vite（独立 npm 包）
-│  ├─ vite.config.js     # PWA manifest/SW 配置；dev 端口 5175，代理 /api → 3000
+│  ├─ vite.config.js     # PWA manifest/SW 配置；dev 端口 5175，代理 /api → 后端（默认 3000，跟随 PORT 环境变量）
 │  ├─ public/            # 背景插画（bg-misty-lake.jpg，Pexels 自由授权素材，style.css 引用）、PWA 图标
 │  └─ src/
 │     ├─ App.vue         # 布局根：组装组件、全局键盘/visibilitychange 监听、会话恢复
@@ -52,6 +52,8 @@ npm workspaces 单仓多包，依赖提升到根 `node_modules`：
 | `npm run test --workspace backend` / `--workspace frontend` | 单独跑一端测试 |
 
 注意：README 开发一节写的 Vite 端口 5173 已过时，实际固定 5175（strictPort），原因是本机 pm2 占用 5173/5174。
+
+**端口坑（2026-09-05 实录）**：Hyper-V/WinNAT 每次开机会动态保留端口段（`netsh interface ipv4 show excludedportrange protocol=tcp` 查看），某次开机后 3000 落进保留区间，listen 阶段异步报 EACCES。Windows 上 bind 会"成功"且 listening 回调先于 error 触发，所以 server.js 不挂 error 监听会打出假启动横幅后无声退出（已修复：server.js 监听 error 事件并明确报错）。临时解法：`PORT=3785 npm run dev`（vite 代理跟随 PORT）；永久解法：管理员执行 `netsh int ipv4 set dynamic tcp start=49152 num=16384` 后重启。
 
 ## Git 与远程
 
