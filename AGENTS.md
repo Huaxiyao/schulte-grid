@@ -131,3 +131,7 @@ auth 路由 → leaderboard 路由 → `auth.requireAuth` → record 路由。�
 ## 测试要求
 
 改后端路由/鉴权/成绩逻辑或前端 state/sync/api/gameLogic 后，必须跑 `npm test` 并保持通过。测试覆盖较全（会话续期、限速、游客合并、云同步边界都有用例），新增行为应同步补测试。
+
+## 路线图与待办
+
+一切待办与取舍见 [docs/ROADMAP.md](docs/ROADMAP.md)——**由触发条件驱动**：用户问「还能做什么」或会话开始时先读它；没有触发信号就不推进（完成状态不是失职，发明需求才是）。
