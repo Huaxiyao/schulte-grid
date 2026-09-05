@@ -20,7 +20,6 @@
     <ResultDialog @again="restart" @close="state.showResult = false" />
     <AuthDialog @entered="restart" />
     <Leaderboard />
-    <Leaderboard />
   </div>
 </template>
 
@@ -53,6 +52,9 @@ async function checkSession() {
 }
 function onKeydown(e) {
   if (e.repeat) return;
+  const el = e.target;
+  // 输入框内打字不触发快捷键（登录表单的用户名/密码不能被 r/空格 吞掉）
+  if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return;
   if (e.key === 'r' || e.key === 'R' || e.key === ' ') {
     e.preventDefault();
     restart();
