@@ -8,8 +8,7 @@
 
 ```bash
 npm install        # 首次使用
-npm run build      # 构建前端（首次或前端改动后）
-npm start          # 启动服务，访问 http://localhost:3785
+npm start          # 自动构建前端并启动服务（单端口），访问 http://localhost:3785
 ```
 
 局域网内手机/其他电脑访问 `http://<本机IP>:3785`。
